@@ -174,21 +174,6 @@ function capturePageSelectors(url,scenarios,viewports,bitmaps_reference,bitmaps_
 
         scenario.selectors.forEach(function(o,i,a){
 
-          if (!isReference && scenario.domReplay && casper.exists(o)) {
-            casper.evaluate(function(o, compareConfigJSON) {
-              console.log('v')
-              var selection = document.querySelectorAll(o);
-              if (selection.length) {
-                console.log('instantReplay: using cached DOM for "' + o + '"')
-                selection[0].innerHTML = compareConfigJSON.domReplay[o] || '';
-              }
-            }, {
-              o: o,
-              compareConfigJSON: compareConfigJSON
-            });
-            casper.wait(1000);
-          }
-
           var cleanedSelectorName = o.replace(/[^a-z0-9_\-]/gi,'');//remove anything that's not a letter or a number
           //var cleanedUrl = scenario.url.replace(/[^a-zA-Z\d]/,'');//remove anything that's not a letter or a number
           var fileName = scenario_index + '_' + i + '_' + cleanedSelectorName + '_' + viewport_index + '_' + vp.name + '.png';;
@@ -198,6 +183,24 @@ function capturePageSelectors(url,scenarios,viewports,bitmaps_reference,bitmaps_
 
           var filePath      = (isReference)?reference_FP:test_FP;
           var selectorContent = "";
+
+
+
+          if (!isReference && scenario.domReplay && casper.exists(o)) {
+            casper.evaluate(function(o, compareConfigJSON) {
+              var selection = document.querySelectorAll(o);
+              if (selection.length) {
+                console.log('instantReplay: using cached DOM for "' + o + '"')
+                selection[0].innerHTML = compareConfigJSON.domReplay[fileName] || '';
+              }
+            }, {
+              o: o,
+              compareConfigJSON: compareConfigJSON
+            });
+            casper.wait(1000);
+          }
+
+
 
           casper.then(function(){
             console.log('^')
@@ -225,7 +228,7 @@ function capturePageSelectors(url,scenarios,viewports,bitmaps_reference,bitmaps_
 
 
             if (isReference) {
-              selectors[o] = selectorContent;
+              selectors[fileName] = selectorContent;
             } else {
               compareConfig.testPairs.push({
                 reference:reference_FP,

@@ -187,17 +187,17 @@ function capturePageSelectors(url,scenarios,viewports,bitmaps_reference,bitmaps_
 
 
           if (!isReference && scenario.domReplay && casper.exists(o)) {
-            casper.evaluate(function(o, compareConfigJSON) {
+            casper.evaluate(function(o, domReplay) {
               var selection = document.querySelectorAll(o);
               if (selection.length) {
                 console.log('instantReplay: using cached DOM for "' + o + '"')
-                selection[0].innerHTML = compareConfigJSON.domReplay[fileName] || '';
+                selection[0].innerHTML = domReplay || '';
               }
             }, {
               o: o,
-              compareConfigJSON: compareConfigJSON
+              domReplay: compareConfigJSON.domReplay[fileName]
             });
-            casper.wait(1000);
+            casper.wait(500);
           }
 
 

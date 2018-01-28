@@ -56,6 +56,7 @@ const Wrapper = styled.div`
 const WrapTitle = styled.div`
   display: flex;
   justify-content: center;
+  padding-bottom: 20px;
 `;
 
 export default function ImageScrubber({

@@ -49,7 +49,7 @@ const Wrapper = styled.div`
 
   .testImage,
   .refImage {
-    width: 100%;
+    max-width: 100%;
   }
 `;
 

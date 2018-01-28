@@ -27391,7 +27391,6 @@ var scrubber = function scrubber() {
 
   switch (action.type) {
     case 'OPEN_SCRUBBER_MODAL':
-      console.log('>>>', action);
       var targetImgId = '';
       try {
         targetImgId = action.value.targetImg.id;
@@ -30966,7 +30965,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _templateObject = _taggedTemplateLiteral(['\n  position: relative;\n  margin: 5px auto;\n  padding: 10px 30px;\n  background-color: ', ';\n  box-shadow: ', ';\n  min-height: 40px;\n\n  &:before {\n    content: \'\';\n    display: block;\n    width: 5px;\n    height: 100%;\n    background-color: ', ';\n    position: absolute;\n    top: 0;\n    left: 0;\n  }\n'], ['\n  position: relative;\n  margin: 5px auto;\n  padding: 10px 30px;\n  background-color: ', ';\n  box-shadow: ', ';\n  min-height: 40px;\n\n  &:before {\n    content: \'\';\n    display: block;\n    width: 5px;\n    height: 100%;\n    background-color: ', ';\n    position: absolute;\n    top: 0;\n    left: 0;\n  }\n']);
+var _templateObject = _taggedTemplateLiteral(['\n  position: relative;\n  margin: 5px auto;\n  padding: 10px 30px;\n  background-color: ', ';\n  box-shadow: ', ';\n  min-height: 40px;\n\n  &:before {\n    content: \'\';\n    display: block;\n    width: 8px;\n    height: 100%;\n    background-color: ', ';\n    position: absolute;\n    top: 0;\n    left: 0;\n  }\n'], ['\n  position: relative;\n  margin: 5px auto;\n  padding: 10px 30px;\n  background-color: ', ';\n  box-shadow: ', ';\n  min-height: 40px;\n\n  &:before {\n    content: \'\';\n    display: block;\n    width: 8px;\n    height: 100%;\n    background-color: ', ';\n    position: absolute;\n    top: 0;\n    left: 0;\n  }\n']);
 
 var _react = __webpack_require__(3);
 
@@ -31682,7 +31681,8 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _templateObject = _taggedTemplateLiteral(['\n  display: block;\n'], ['\n  display: block;\n']),
-    _templateObject2 = _taggedTemplateLiteral(['\n  position: absolute;\n  right: 60px;\n  top: 35px;\n  width: 30px;\n  height: 30px;\n  background-image: url(', ');\n  background-size: 100%;\n  background-repeat: no-repeat;\n  background-color: transparent;\n  border: none;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n  }\n'], ['\n  position: absolute;\n  right: 60px;\n  top: 35px;\n  width: 30px;\n  height: 30px;\n  background-image: url(', ');\n  background-size: 100%;\n  background-repeat: no-repeat;\n  background-color: transparent;\n  border: none;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n  }\n']);
+    _templateObject2 = _taggedTemplateLiteral(['\n  display: block;\n  position: relative;\n'], ['\n  display: block;\n  position: relative;\n']),
+    _templateObject3 = _taggedTemplateLiteral(['\n  position: absolute;\n  right: 30px;\n  top: 0;\n  width: 30px;\n  height: 30px;\n  background-image: url(', ');\n  background-size: 100%;\n  background-repeat: no-repeat;\n  background-color: transparent;\n  border: none;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n  }\n'], ['\n  position: absolute;\n  right: 30px;\n  top: 0;\n  width: 30px;\n  height: 30px;\n  background-image: url(', ');\n  background-size: 100%;\n  background-repeat: no-repeat;\n  background-color: transparent;\n  border: none;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n  }\n']);
 
 var _react = __webpack_require__(3);
 
@@ -31736,7 +31736,9 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 
 var Wrapper = _styledComponents2.default.div(_templateObject);
 
-var ButtonClose = _styledComponents2.default.button(_templateObject2, _close2.default);
+var ModalHeader = _styledComponents2.default.div(_templateObject2);
+
+var ButtonClose = _styledComponents2.default.button(_templateObject3, _close2.default);
 
 var customStyles = {
   content: {
@@ -31793,9 +31795,13 @@ var ScrubberModal = function (_React$Component) {
             style: customStyles,
             contentLabel: 'Example Modal'
           },
-          _react2.default.createElement(ButtonClose, { onClick: closeModal }),
-          _react2.default.createElement(_Logo2.default, null),
-          mode === 'scrub' && _react2.default.createElement(_ImageScrubber2.default, {
+          _react2.default.createElement(
+            ModalHeader,
+            null,
+            _react2.default.createElement(ButtonClose, { onClick: closeModal }),
+            _react2.default.createElement(_Logo2.default, null)
+          ),
+          _react2.default.createElement(_ImageScrubber2.default, {
             testImage: testImage,
             refImage: refImage,
             position: position,
@@ -32866,8 +32872,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _templateObject = _taggedTemplateLiteral(['\n  margin: 1em;\n  padding: 10px 16px;\n  height: 32px;\n  background-color: ', ';\n  color: ', ';\n  border-radius: 3px;\n  text-transform: uppercase;\n  font-family: ', ';\n  text-align: center;\n  font-size: 12px;\n  border: none;\n  box-shadow: ', ';\n\n  transition: all 0.3s ease-in-out;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n    box-shadow: ', ';\n  }\n'], ['\n  margin: 1em;\n  padding: 10px 16px;\n  height: 32px;\n  background-color: ', ';\n  color: ', ';\n  border-radius: 3px;\n  text-transform: uppercase;\n  font-family: ', ';\n  text-align: center;\n  font-size: 12px;\n  border: none;\n  box-shadow: ', ';\n\n  transition: all 0.3s ease-in-out;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n    box-shadow: ', ';\n  }\n']),
-    _templateObject2 = _taggedTemplateLiteral(['\n  height: 100%;\n  cursor: ew-resize;\n  padding-bottom: 20px;\n  overflow: auto;\n\n  .slider {\n    height: 100%;\n    width: 5px;\n    background: ', ';\n  }\n\n  .testImage {\n    opacity: 1;\n  }\n\n  .testImage,\n  .refImage {\n    width: 100%;\n  }\n'], ['\n  height: 100%;\n  cursor: ew-resize;\n  padding-bottom: 20px;\n  overflow: auto;\n\n  .slider {\n    height: 100%;\n    width: 5px;\n    background: ', ';\n  }\n\n  .testImage {\n    opacity: 1;\n  }\n\n  .testImage,\n  .refImage {\n    width: 100%;\n  }\n']),
-    _templateObject3 = _taggedTemplateLiteral(['\n  display: flex;\n  justify-content: center;\n'], ['\n  display: flex;\n  justify-content: center;\n']);
+    _templateObject2 = _taggedTemplateLiteral(['\n  height: 100%;\n  cursor: ew-resize;\n  padding-bottom: 20px;\n  overflow: auto;\n\n  .slider {\n    height: 100%;\n    width: 5px;\n    background: ', ';\n  }\n\n  .testImage {\n    opacity: 1;\n  }\n\n  .testImage,\n  .refImage {\n    max-width: 100%;\n  }\n'], ['\n  height: 100%;\n  cursor: ew-resize;\n  padding-bottom: 20px;\n  overflow: auto;\n\n  .slider {\n    height: 100%;\n    width: 5px;\n    background: ', ';\n  }\n\n  .testImage {\n    opacity: 1;\n  }\n\n  .testImage,\n  .refImage {\n    max-width: 100%;\n  }\n']),
+    _templateObject3 = _taggedTemplateLiteral(['\n  display: flex;\n  justify-content: center;\n  padding-bottom: 20px;\n'], ['\n  display: flex;\n  justify-content: center;\n  padding-bottom: 20px;\n']);
 
 exports.default = ImageScrubber;
 

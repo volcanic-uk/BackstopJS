@@ -26,7 +26,7 @@
   },
   "lint-staged": {
     "compare/src/**/*.js": [
-      "node_modules/.bin/prettier --single-quote --no-semi --write",
+      "node_modules/.bin/prettier --single-quote --write",
       "git add"
     ]
   },

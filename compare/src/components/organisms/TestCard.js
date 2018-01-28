@@ -1,15 +1,15 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
-import { colors, shadows } from '../../styles'
+import { colors, shadows } from '../../styles';
 
 // atoms
-import TextDetails from '../atoms/TextDetails'
-import NavButtons from '../atoms/NavButtons'
+import TextDetails from '../atoms/TextDetails';
+import NavButtons from '../atoms/NavButtons';
 
 // molecules
-import TestImages from '../molecules/TestImages'
-import ScrubberButton from '../molecules/ScrubberButton'
+import TestImages from '../molecules/TestImages';
+import ScrubberButton from '../molecules/ScrubberButton';
 
 const CardWrapper = styled.div`
   position: relative;
@@ -22,7 +22,7 @@ const CardWrapper = styled.div`
   &:before {
     content: '';
     display: block;
-    width: 5px;
+    width: 8px;
     height: 100%;
     background-color: ${props =>
       props.status === 'pass' ? colors.green : colors.red};
@@ -30,12 +30,12 @@ const CardWrapper = styled.div`
     top: 0;
     left: 0;
   }
-`
+`;
 
 export default class TestCard extends React.Component {
   render() {
-    let { pair: info, status } = this.props.test
-    let onlyText = this.props.onlyText
+    let { pair: info, status } = this.props.test;
+    let onlyText = this.props.onlyText;
 
     return (
       <CardWrapper id={this.props.id} status={status}>
@@ -46,6 +46,6 @@ export default class TestCard extends React.Component {
         <ScrubberButton info={info} onlyText={onlyText} />
         <TestImages info={info} status={status} />
       </CardWrapper>
-    )
+    );
   }
 }

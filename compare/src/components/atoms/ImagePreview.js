@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-
 import { colors, fonts } from '../../styles';
+
+const BASE64_PNG_STUB =
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 const Image = styled.img`
   width: auto;
@@ -34,13 +36,26 @@ const Label = styled.span`
 `;
 
 class ImagePreview extends React.Component {
-  render() {
-    let { hidden, settings } = this.props;
+  constructor(props) {
+    super(props);
+    this.onLoadError = this.onLoadError.bind(this);
 
+    this.state = this.props;
+  }
+
+  onLoadError(img) {
+    this.setState({
+      src: BASE64_PNG_STUB
+    });
+    return false;
+  }
+
+  render() {
+    let { hidden, settings, label } = this.state;
     return (
       <Wrapper hidden={hidden} withText={settings.textInfo}>
-        <Label>{this.props.label}</Label>
-        <Image {...this.props} />
+        <Label>{label}</Label>
+        <Image {...this.state} onError={this.onLoadError} />
       </Wrapper>
     );
   }

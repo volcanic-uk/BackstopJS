@@ -31780,9 +31780,6 @@ var ScrubberModal = function (_React$Component) {
           showScrubber = _props.showScrubber;
 
 
-      console.log(this.props);
-      if (!diffImage) console.log('no diff');
-
       return _react2.default.createElement(
         Wrapper,
         null,
@@ -32872,8 +32869,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _templateObject = _taggedTemplateLiteral(['\n  margin: 1em;\n  padding: 10px 16px;\n  height: 32px;\n  background-color: ', ';\n  color: ', ';\n  border-radius: 3px;\n  text-transform: uppercase;\n  font-family: ', ';\n  text-align: center;\n  font-size: 12px;\n  border: none;\n  box-shadow: ', ';\n\n  transition: all 0.3s ease-in-out;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n    box-shadow: ', ';\n  }\n'], ['\n  margin: 1em;\n  padding: 10px 16px;\n  height: 32px;\n  background-color: ', ';\n  color: ', ';\n  border-radius: 3px;\n  text-transform: uppercase;\n  font-family: ', ';\n  text-align: center;\n  font-size: 12px;\n  border: none;\n  box-shadow: ', ';\n\n  transition: all 0.3s ease-in-out;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n    box-shadow: ', ';\n  }\n']),
-    _templateObject2 = _taggedTemplateLiteral(['\n  cursor: ew-resize;\n  padding-bottom: 20px;\n  overflow: hidden;\n\n  .slider {\n    height: 100%;\n    width: 5px;\n    background: ', ';\n  }\n\n  .testImage {\n    opacity: 1;\n  }\n\n  .testImage,\n  .refImage {\n    max-width: 100%;\n  }\n'], ['\n  cursor: ew-resize;\n  padding-bottom: 20px;\n  overflow: hidden;\n\n  .slider {\n    height: 100%;\n    width: 5px;\n    background: ', ';\n  }\n\n  .testImage {\n    opacity: 1;\n  }\n\n  .testImage,\n  .refImage {\n    max-width: 100%;\n  }\n']),
-    _templateObject3 = _taggedTemplateLiteral(['\n  display: flex;\n  justify-content: center;\n  padding-bottom: 20px;\n'], ['\n  display: flex;\n  justify-content: center;\n  padding-bottom: 20px;\n']);
+    _templateObject2 = _taggedTemplateLiteral(['\n  cursor: ew-resize;\n  padding-bottom: 20px;\n  overflow: hidden;\n\n  .testImage {\n    opacity: 1;\n  }\n\n  .testImage,\n  .refImage {\n    max-width: 100%;\n  }\n'], ['\n  cursor: ew-resize;\n  padding-bottom: 20px;\n  overflow: hidden;\n\n  .testImage {\n    opacity: 1;\n  }\n\n  .testImage,\n  .refImage {\n    max-width: 100%;\n  }\n']),
+    _templateObject3 = _taggedTemplateLiteral(['\n  display: flex;\n  justify-content: center;\n  padding-bottom: 20px;\n'], ['\n  display: flex;\n  justify-content: center;\n  padding-bottom: 20px;\n']),
+    _templateObject4 = _taggedTemplateLiteral(['\n  height: 100%;\n  width: 5px;\n  background: ', ';\n  transform: translate(-2.5px, 0);\n'], ['\n  height: 100%;\n  width: 5px;\n  background: ', ';\n  transform: translate(-2.5px, 0);\n']);
 
 exports.default = ImageScrubber;
 
@@ -32905,9 +32903,11 @@ var ScrubberViewBtn = _styledComponents2.default.button(_templateObject, functio
   return !props.selected ? _styles.shadows.shadow02 : '';
 });
 
-var Wrapper = _styledComponents2.default.div(_templateObject2, _styles.colors.red);
+var Wrapper = _styledComponents2.default.div(_templateObject2);
 
 var WrapTitle = _styledComponents2.default.div(_templateObject3);
+
+var SliderBar = _styledComponents2.default.div(_templateObject4, _styles.colors.red);
 
 function ImageScrubber(_ref) {
   var position = _ref.position,
@@ -32970,10 +32970,9 @@ function ImageScrubber(_ref) {
       },
       _react2.default.createElement('img', { className: 'refImage', src: refImage }),
       _react2.default.createElement('img', { className: 'testImage', src: testImage }),
-      _react2.default.createElement('div', { className: 'slider' })
+      _react2.default.createElement(SliderBar, { className: 'slider', style: { display: position === 0 || position === 100 ? 'none' : '' } })
     )
   );
-  // }
 }
 
 /***/ }),

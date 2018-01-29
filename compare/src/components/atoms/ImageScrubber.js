@@ -36,12 +36,6 @@ const Wrapper = styled.div`
   padding-bottom: 20px;
   overflow: hidden;
 
-  .slider {
-    height: 100%;
-    width: 5px;
-    background: ${colors.red};
-  }
-
   .testImage {
     opacity: 1;
   }
@@ -56,6 +50,13 @@ const WrapTitle = styled.div`
   display: flex;
   justify-content: center;
   padding-bottom: 20px;
+`;
+
+const SliderBar = styled.div`
+  height: 100%;
+  width: 5px;
+  background: ${colors.red};
+  transform: translate(-2.5px, 0);
 `;
 
 export default function ImageScrubber({
@@ -108,9 +109,11 @@ export default function ImageScrubber({
       >
         <img className="refImage" src={refImage} />
         <img className="testImage" src={testImage} />
-        <div className="slider" />
+        <SliderBar
+          className="slider"
+          style={{ display: position === 0 || position === 100 ? 'none' : '' }}
+        />
       </TwentyTwenty>
     </Wrapper>
   );
-  // }
 }

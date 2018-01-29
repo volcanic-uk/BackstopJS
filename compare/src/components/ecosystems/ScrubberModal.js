@@ -81,9 +81,6 @@ class ScrubberModal extends React.Component {
       showScrubber
     } = this.props;
 
-    console.log(this.props);
-    if (!diffImage) console.log('no diff');
-
     return (
       <Wrapper>
         <Modal

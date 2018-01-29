@@ -32,10 +32,9 @@ const ScrubberViewBtn = styled.button`
 `;
 
 const Wrapper = styled.div`
-  height: 100%;
   cursor: ew-resize;
   padding-bottom: 20px;
-  overflow: auto;
+  overflow: hidden;
 
   .slider {
     height: 100%;

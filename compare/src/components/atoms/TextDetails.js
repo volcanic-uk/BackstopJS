@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import DiffDetails from './DiffDetails';
 
 import { colors, fonts } from '../../styles';
 
@@ -80,14 +81,8 @@ class TextDetails extends React.Component {
           <Label>filename: </Label>
           <Value onMouseOver={this.showPanel}>{fileName}</Value>
         </Row>
-        <Row hidden={!settings.textInfo}>
-          <Label>diff%: </Label>
-          <Value>{diff.misMatchPercentage}</Value>
-          <Label>diff-x: </Label>
-          <Value>{diff.dimensionDifference.width}</Value>
-          <Label>diff-y: </Label>
-          <Value>{diff.dimensionDifference.height}</Value>
-        </Row>
+        <DiffDetails settings={settings} diff={diff} />
+
         <DetailsPanel {...{ showPanel }} onMouseLeave={this.hidePanel}>
           <Row>
             <Label>label: </Label>
@@ -99,14 +94,7 @@ class TextDetails extends React.Component {
             <Label>filename: </Label>
             <Value>{fileName}</Value>
           </Row>
-          <Row>
-            <Label>diff%: </Label>
-            <Value>{diff.misMatchPercentage}</Value>
-            <Label>diff-x: </Label>
-            <Value>{diff.dimensionDifference.width}</Value>
-            <Label>diff-y: </Label>
-            <Value>{diff.dimensionDifference.height}</Value>
-          </Row>
+          <DiffDetails settings={settings} diff={diff} />
         </DetailsPanel>
       </WrapperDetails>
     );

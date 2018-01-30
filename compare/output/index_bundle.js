@@ -31583,11 +31583,10 @@ var ImagePreview = function (_React$Component) {
 
   _createClass(ImagePreview, [{
     key: 'onLoadError',
-    value: function onLoadError(img) {
+    value: function onLoadError() {
       this.setState({
         src: BASE64_PNG_STUB
       });
-      return false;
     }
   }, {
     key: 'render',
@@ -32928,16 +32927,18 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _templateObject = _taggedTemplateLiteral(['\n  margin: 1em;\n  padding: 10px 16px;\n  height: 32px;\n  background-color: ', ';\n  color: ', ';\n  border-radius: 3px;\n  text-transform: uppercase;\n  font-family: ', ';\n  text-align: center;\n  font-size: 12px;\n  border: none;\n  box-shadow: ', ';\n\n  transition: all 0.3s ease-in-out;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n    box-shadow: ', ';\n  }\n'], ['\n  margin: 1em;\n  padding: 10px 16px;\n  height: 32px;\n  background-color: ', ';\n  color: ', ';\n  border-radius: 3px;\n  text-transform: uppercase;\n  font-family: ', ';\n  text-align: center;\n  font-size: 12px;\n  border: none;\n  box-shadow: ', ';\n\n  transition: all 0.3s ease-in-out;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n    box-shadow: ', ';\n  }\n']),
     _templateObject2 = _taggedTemplateLiteral(['\n  cursor: ew-resize;\n  padding-bottom: 20px;\n  overflow: hidden;\n\n  .testImage {\n    opacity: 1;\n  }\n\n  .testImage,\n  .refImage {\n    max-width: 100%;\n  }\n'], ['\n  cursor: ew-resize;\n  padding-bottom: 20px;\n  overflow: hidden;\n\n  .testImage {\n    opacity: 1;\n  }\n\n  .testImage,\n  .refImage {\n    max-width: 100%;\n  }\n']),
     _templateObject3 = _taggedTemplateLiteral(['\n  display: flex;\n  justify-content: center;\n  padding-bottom: 20px;\n'], ['\n  display: flex;\n  justify-content: center;\n  padding-bottom: 20px;\n']),
     _templateObject4 = _taggedTemplateLiteral(['\n  height: 100%;\n  width: 5px;\n  background: ', ';\n  transform: translate(-2.5px, 0);\n'], ['\n  height: 100%;\n  width: 5px;\n  background: ', ';\n  transform: translate(-2.5px, 0);\n']);
 
-exports.default = ImageScrubber;
-
 var _react = __webpack_require__(3);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(10);
 
 var _styledComponents = __webpack_require__(5);
 
@@ -32951,7 +32952,15 @@ var _styles = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var BASE64_PNG_STUB = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 var ScrubberViewBtn = _styledComponents2.default.button(_templateObject, function (props) {
   return props.selected ? _styles.colors.secondaryText : _styles.colors.lightGray;
@@ -32969,74 +32978,124 @@ var WrapTitle = _styledComponents2.default.div(_templateObject3);
 
 var SliderBar = _styledComponents2.default.div(_templateObject4, _styles.colors.red);
 
-function ImageScrubber(_ref) {
-  var position = _ref.position,
-      refImage = _ref.refImage,
-      testImage = _ref.testImage,
-      showButtons = _ref.showButtons,
-      showScrubberTestImage = _ref.showScrubberTestImage,
-      showScrubberRefImage = _ref.showScrubberRefImage,
-      showScrubber = _ref.showScrubber;
+var ImageScrubber = function (_React$Component) {
+  _inherits(ImageScrubber, _React$Component);
 
-  return _react2.default.createElement(
-    Wrapper,
-    null,
-    _react2.default.createElement(
-      WrapTitle,
-      null,
-      showButtons && _react2.default.createElement(
-        'div',
+  function ImageScrubber(props) {
+    _classCallCheck(this, ImageScrubber);
+
+    var _this = _possibleConstructorReturn(this, (ImageScrubber.__proto__ || Object.getPrototypeOf(ImageScrubber)).call(this, props));
+
+    _this.state = {
+      dontUseScrubberView: false
+    };
+
+    _this.handleLoadingError = _this.handleLoadingError.bind(_this);
+    return _this;
+  }
+
+  _createClass(ImageScrubber, [{
+    key: 'handleLoadingError',
+    value: function handleLoadingError() {
+      this.setState({
+        dontUseScrubberView: true
+      });
+      console.log('ERROR LOADING>>>', this.state);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          position = _props.position,
+          refImage = _props.refImage,
+          testImage = _props.testImage,
+          showButtons = _props.showButtons,
+          showScrubberTestImage = _props.showScrubberTestImage,
+          showScrubberRefImage = _props.showScrubberRefImage,
+          showScrubber = _props.showScrubber;
+
+
+      return _react2.default.createElement(
+        Wrapper,
         null,
         _react2.default.createElement(
-          ScrubberViewBtn,
-          {
-            selected: position === 100,
-            onClick: function onClick() {
-              showScrubberRefImage();
-            }
-          },
-          'REFERENCE'
+          WrapTitle,
+          null,
+          showButtons && _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              ScrubberViewBtn,
+              {
+                selected: position === 100,
+                onClick: function onClick() {
+                  showScrubberRefImage();
+                }
+              },
+              'REFERENCE'
+            ),
+            _react2.default.createElement(
+              ScrubberViewBtn,
+              {
+                selected: position === 0,
+                onClick: function onClick() {
+                  showScrubberTestImage();
+                }
+              },
+              'TEST'
+            ),
+            _react2.default.createElement(
+              ScrubberViewBtn,
+              {
+                selected: position !== 100 && position !== 0,
+                onClick: function onClick() {
+                  showScrubber();
+                }
+              },
+              'SCRUBBER'
+            )
+          )
         ),
+        _react2.default.createElement('img', { className: 'testImage', src: testImage, style: {
+            display: this.state.dontUseScrubberView ? 'block' : 'none',
+            margin: 'auto'
+          } }),
         _react2.default.createElement(
-          ScrubberViewBtn,
+          _reactTwentytwenty2.default,
           {
-            selected: position === 0,
-            onClick: function onClick() {
-              showScrubberTestImage();
-            }
+            verticalAlign: 'top',
+            minDistanceToBeginInteraction: 0,
+            maxAngleToBeginInteraction: Infinity,
+            initialPosition: position,
+            newPosition: position,
+            style: { display: this.state.dontUseScrubberView ? 'none' : 'block' }
           },
-          'TEST'
+          _react2.default.createElement('img', { className: 'refImage', src: refImage, onError: this.handleLoadingError }),
+          _react2.default.createElement('img', { className: 'testImage', src: testImage }),
+          _react2.default.createElement(SliderBar, {
+            className: 'slider',
+            style: { display: position === 0 || position === 100 ? 'none' : '' }
+          })
         ),
-        _react2.default.createElement(
-          ScrubberViewBtn,
-          {
-            selected: position !== 100 && position !== 0,
-            onClick: function onClick() {
-              showScrubber();
-            }
-          },
-          'SCRUBBER'
-        )
-      )
-    ),
-    _react2.default.createElement(
-      _reactTwentytwenty2.default,
-      {
-        verticalAlign: 'top',
-        minDistanceToBeginInteraction: 0,
-        maxAngleToBeginInteraction: Infinity,
-        initialPosition: position,
-        newPosition: position
-      },
-      _react2.default.createElement('img', { className: 'refImage', src: refImage }),
-      _react2.default.createElement('img', { className: 'testImage', src: testImage }),
-      _react2.default.createElement(SliderBar, {
-        className: 'slider',
-        style: { display: position === 0 || position === 100 ? 'none' : '' }
-      })
-    )
-  );
-}
+        '}'
+      );
+    }
+  }]);
+
+  return ImageScrubber;
+}(_react2.default.Component);
+
+// const mapStateToProps = state => {
+//   console.log('map state>>>',state)
+//   return {
+//     test_: state
+//   };
+// };
+
+// const ImageScrubberContainer = connect(mapStateToProps)(ImageScrubber);
+
+
+exports.default = ImageScrubber;
 
 /***/ }),
 /* 290 */

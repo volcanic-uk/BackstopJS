@@ -1,8 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import TwentyTwenty from 'react-twentytwenty';
-
 import { colors, fonts, shadows } from '../../styles';
+
+const BASE64_PNG_STUB =
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 const ScrubberViewBtn = styled.button`
   margin: 1em;
@@ -59,61 +62,107 @@ const SliderBar = styled.div`
   transform: translate(-2.5px, 0);
 `;
 
-export default function ImageScrubber({
-  position,
-  refImage,
-  testImage,
-  showButtons,
-  showScrubberTestImage,
-  showScrubberRefImage,
-  showScrubber
-}) {
-  return (
-    <Wrapper>
-      <WrapTitle>
-        {showButtons && (
-          <div>
-            <ScrubberViewBtn
-              selected={position === 100}
-              onClick={() => {
-                showScrubberRefImage();
-              }}
-            >
-              REFERENCE
-            </ScrubberViewBtn>
-            <ScrubberViewBtn
-              selected={position === 0}
-              onClick={() => {
-                showScrubberTestImage();
-              }}
-            >
-              TEST
-            </ScrubberViewBtn>
-            <ScrubberViewBtn
-              selected={position !== 100 && position !== 0}
-              onClick={() => {
-                showScrubber();
-              }}
-            >
-              SCRUBBER
-            </ScrubberViewBtn>
-          </div>
-        )}
-      </WrapTitle>
-      <TwentyTwenty
-        verticalAlign="top"
-        minDistanceToBeginInteraction={0}
-        maxAngleToBeginInteraction={Infinity}
-        initialPosition={position}
-        newPosition={position}
-      >
-        <img className="refImage" src={refImage} />
-        <img className="testImage" src={testImage} />
-        <SliderBar
-          className="slider"
-          style={{ display: position === 0 || position === 100 ? 'none' : '' }}
+export default class ImageScrubber extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      dontUseScrubberView: false
+    };
+
+    this.handleLoadingError = this.handleLoadingError.bind(this);
+  }
+
+  handleLoadingError() {
+    this.setState({
+      dontUseScrubberView: true
+    });
+    console.log('ERROR LOADING>>>', this.state);
+  }
+
+  render() {
+    let {
+      position,
+      refImage,
+      testImage,
+      showButtons,
+      showScrubberTestImage,
+      showScrubberRefImage,
+      showScrubber
+    } = this.props;
+
+    return (
+      <Wrapper>
+        <WrapTitle>
+          {showButtons && (
+            <div>
+              <ScrubberViewBtn
+                selected={position === 100}
+                onClick={() => {
+                  showScrubberRefImage();
+                }}
+              >
+                REFERENCE
+              </ScrubberViewBtn>
+              <ScrubberViewBtn
+                selected={position === 0}
+                onClick={() => {
+                  showScrubberTestImage();
+                }}
+              >
+                TEST
+              </ScrubberViewBtn>
+              <ScrubberViewBtn
+                selected={position !== 100 && position !== 0}
+                onClick={() => {
+                  showScrubber();
+                }}
+              >
+                SCRUBBER
+              </ScrubberViewBtn>
+            </div>
+          )}
+        </WrapTitle>
+        <img
+          className="testImage"
+          src={testImage}
+          style={{
+            display: this.state.dontUseScrubberView ? 'block' : 'none',
+            margin: 'auto'
+          }}
         />
-      </TwentyTwenty>
-    </Wrapper>
-  );
+        <TwentyTwenty
+          verticalAlign="top"
+          minDistanceToBeginInteraction={0}
+          maxAngleToBeginInteraction={Infinity}
+          initialPosition={position}
+          newPosition={position}
+          style={{ display: this.state.dontUseScrubberView ? 'none' : 'block' }}
+        >
+          <img
+            className="refImage"
+            src={refImage}
+            onError={this.handleLoadingError}
+          />
+          <img className="testImage" src={testImage} />
+          <SliderBar
+            className="slider"
+            style={{
+              display: position === 0 || position === 100 ? 'none' : ''
+            }}
+          />
+        </TwentyTwenty>
+        }
+      </Wrapper>
+    );
+  }
 }
+
+// const mapStateToProps = state => {
+//   console.log('map state>>>',state)
+//   return {
+//     test_: state
+//   };
+// };
+
+// const ImageScrubberContainer = connect(mapStateToProps)(ImageScrubber);

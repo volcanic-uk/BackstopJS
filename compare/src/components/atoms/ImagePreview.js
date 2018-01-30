@@ -43,11 +43,10 @@ class ImagePreview extends React.Component {
     this.state = this.props;
   }
 
-  onLoadError(img) {
+  onLoadError() {
     this.setState({
       src: BASE64_PNG_STUB
     });
-    return false;
   }
 
   render() {

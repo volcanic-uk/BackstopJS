@@ -31525,6 +31525,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _templateObject = _taggedTemplateLiteral(['\n  width: auto;\n  max-width: 100%;\n  max-height: ', ';\n\n  &:hover {\n    cursor: pointer;\n  }\n'], ['\n  width: auto;\n  max-width: 100%;\n  max-height: ', ';\n\n  &:hover {\n    cursor: pointer;\n  }\n']),
@@ -31553,6 +31555,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
+var BASE64_PNG_STUB = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
 var Image = _styledComponents2.default.img(_templateObject, function (props) {
   return props.settings.textInfo ? '150px' : '400px';
 });
@@ -31566,19 +31570,32 @@ var Label = _styledComponents2.default.span(_templateObject3, _styles.fonts.lato
 var ImagePreview = function (_React$Component) {
   _inherits(ImagePreview, _React$Component);
 
-  function ImagePreview() {
+  function ImagePreview(props) {
     _classCallCheck(this, ImagePreview);
 
-    return _possibleConstructorReturn(this, (ImagePreview.__proto__ || Object.getPrototypeOf(ImagePreview)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (ImagePreview.__proto__ || Object.getPrototypeOf(ImagePreview)).call(this, props));
+
+    _this.onLoadError = _this.onLoadError.bind(_this);
+
+    _this.state = _this.props;
+    return _this;
   }
 
   _createClass(ImagePreview, [{
+    key: 'onLoadError',
+    value: function onLoadError(img) {
+      this.setState({
+        src: BASE64_PNG_STUB
+      });
+      return false;
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var _props = this.props,
-          hidden = _props.hidden,
-          settings = _props.settings;
-
+      var _state = this.state,
+          hidden = _state.hidden,
+          settings = _state.settings,
+          label = _state.label;
 
       return _react2.default.createElement(
         Wrapper,
@@ -31586,9 +31603,9 @@ var ImagePreview = function (_React$Component) {
         _react2.default.createElement(
           Label,
           null,
-          this.props.label
+          label
         ),
-        _react2.default.createElement(Image, this.props)
+        _react2.default.createElement(Image, _extends({}, this.state, { onError: this.onLoadError }))
       );
     }
   }]);

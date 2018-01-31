@@ -65,7 +65,6 @@ const SliderBar = styled.div`
 export default class ImageScrubber extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       dontUseScrubberView: false
     };
@@ -77,11 +76,10 @@ export default class ImageScrubber extends React.Component {
     this.setState({
       dontUseScrubberView: true
     });
-    console.log('ERROR LOADING>>>', this.state);
   }
 
   render() {
-    let {
+    const {
       position,
       refImage,
       testImage,
@@ -90,6 +88,8 @@ export default class ImageScrubber extends React.Component {
       showScrubberRefImage,
       showScrubber
     } = this.props;
+
+    const dontUseScrubberView = this.state.dontUseScrubberView;
 
     return (
       <Wrapper>
@@ -127,26 +127,31 @@ export default class ImageScrubber extends React.Component {
           className="testImage"
           src={testImage}
           style={{
-            display: this.state.dontUseScrubberView ? 'block' : 'none',
-            margin: 'auto'
+            margin: 'auto',
+            display: dontUseScrubberView ? 'block' : 'none'
           }}
         />
-        <TwentyTwenty
-          verticalAlign="top"
-          minDistanceToBeginInteraction={0}
-          maxAngleToBeginInteraction={Infinity}
-          initialPosition={position}
-          newPosition={position}
-          style={{ display: this.state.dontUseScrubberView ? 'none' : 'block' }}
+        <div
+          style={{
+            display: dontUseScrubberView ? 'none' : 'block'
+          }}
         >
-          <img
-            className="refImage"
-            src={refImage}
-            onError={this.handleLoadingError}
-          />
-          <img className="testImage" src={testImage} />
-          <SliderBar className="slider" />
-        </TwentyTwenty>
+          <TwentyTwenty
+            verticalAlign="top"
+            minDistanceToBeginInteraction={0}
+            maxAngleToBeginInteraction={Infinity}
+            initialPosition={position}
+            newPosition={position}
+          >
+            <img
+              className="refImage"
+              src={refImage}
+              onError={this.handleLoadingError}
+            />
+            <img className="testImage" src={testImage} />
+            <SliderBar className="slider" />
+          </TwentyTwenty>
+        </div>
       </Wrapper>
     );
   }

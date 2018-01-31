@@ -13194,7 +13194,11 @@ var Logo = function (_React$Component) {
   _createClass(Logo, [{
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(LogoImage, { src: _logo2.default });
+      return _react2.default.createElement(
+        'a',
+        { href: 'https://garris.github.io/BackstopJS/', target: '_blank' },
+        _react2.default.createElement(LogoImage, { src: _logo2.default })
+      );
     }
   }]);
 
@@ -31831,6 +31835,9 @@ var ScrubberModal = function (_React$Component) {
           refImage = _props$scrubber$test.reference,
           testImage = _props$scrubber$test.test,
           diffImage = _props$scrubber$test.diffImage;
+
+
+      console.log('>>', this.props.scrubber.test);
       var _props$scrubber = this.props.scrubber,
           visible = _props$scrubber.visible,
           mode = _props$scrubber.mode,
@@ -33003,7 +33010,6 @@ var ImageScrubber = function (_React$Component) {
       this.setState({
         dontUseScrubberView: true
       });
-      console.log('ERROR LOADING>>>', this.state);
     }
   }, {
     key: 'render',
@@ -33017,6 +33023,8 @@ var ImageScrubber = function (_React$Component) {
           showScrubberRefImage = _props.showScrubberRefImage,
           showScrubber = _props.showScrubber;
 
+
+      var dontUseScrubberView = this.state.dontUseScrubberView;
 
       return _react2.default.createElement(
         Wrapper,
@@ -33062,28 +33070,26 @@ var ImageScrubber = function (_React$Component) {
         _react2.default.createElement('img', {
           className: 'testImage',
           src: testImage,
-          style: {
-            display: this.state.dontUseScrubberView ? 'block' : 'none',
-            margin: 'auto'
-          }
+          style: { margin: 'auto', display: dontUseScrubberView ? 'block' : 'none' }
         }),
         _react2.default.createElement(
-          _reactTwentytwenty2.default,
-          {
-            verticalAlign: 'top',
-            minDistanceToBeginInteraction: 0,
-            maxAngleToBeginInteraction: Infinity,
-            initialPosition: position,
-            newPosition: position,
-            style: { display: this.state.dontUseScrubberView ? 'none' : 'block' }
-          },
-          _react2.default.createElement('img', {
-            className: 'refImage',
-            src: refImage,
-            onError: this.handleLoadingError
-          }),
-          _react2.default.createElement('img', { className: 'testImage', src: testImage }),
-          _react2.default.createElement(SliderBar, { className: 'slider' })
+          'div',
+          { style: {
+              display: dontUseScrubberView ? 'none' : 'block'
+            } },
+          _react2.default.createElement(
+            _reactTwentytwenty2.default,
+            {
+              verticalAlign: 'top',
+              minDistanceToBeginInteraction: 0,
+              maxAngleToBeginInteraction: Infinity,
+              initialPosition: position,
+              newPosition: position
+            },
+            _react2.default.createElement('img', { className: 'refImage', src: refImage, onError: this.handleLoadingError }),
+            _react2.default.createElement('img', { className: 'testImage', src: testImage }),
+            _react2.default.createElement(SliderBar, { className: 'slider' })
+          )
         )
       );
     }

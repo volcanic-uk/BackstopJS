@@ -145,14 +145,8 @@ export default class ImageScrubber extends React.Component {
             onError={this.handleLoadingError}
           />
           <img className="testImage" src={testImage} />
-          <SliderBar
-            className="slider"
-            style={{
-              display: position === 0 || position === 100 ? 'none' : ''
-            }}
-          />
+          <SliderBar className="slider" />
         </TwentyTwenty>
-        }
       </Wrapper>
     );
   }

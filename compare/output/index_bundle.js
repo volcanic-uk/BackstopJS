@@ -13351,7 +13351,7 @@ var TextDetails = function (_React$Component) {
             fileName
           )
         ),
-        _react2.default.createElement(_DiffDetails2.default, { settings: settings, diff: diff }),
+        _react2.default.createElement(_DiffDetails2.default, { suppress: !settings.textInfo, diff: diff }),
         _react2.default.createElement(
           DetailsPanel,
           _extends({ showPanel: showPanel }, { onMouseLeave: this.hidePanel }),
@@ -13393,7 +13393,7 @@ var TextDetails = function (_React$Component) {
               fileName
             )
           ),
-          _react2.default.createElement(_DiffDetails2.default, { settings: settings, diff: diff })
+          _react2.default.createElement(_DiffDetails2.default, { diff: diff })
         )
       );
     }
@@ -31042,15 +31042,15 @@ var DiffDetails = function (_React$Component) {
     value: function render() {
       var _props = this.props,
           diff = _props.diff,
-          settings = _props.settings;
+          suppress = _props.suppress;
 
-      if (!diff) {
+      if (!diff || suppress) {
         return null;
       }
 
       return _react2.default.createElement(
         Row,
-        { hidden: !settings.textInfo },
+        null,
         _react2.default.createElement(
           Label,
           null,
@@ -31577,24 +31577,24 @@ var ImagePreview = function (_React$Component) {
 
     _this.onLoadError = _this.onLoadError.bind(_this);
 
-    _this.state = _this.props;
+    // this.state = this.props;
     return _this;
   }
 
   _createClass(ImagePreview, [{
     key: 'onLoadError',
     value: function onLoadError() {
-      this.setState({
-        src: BASE64_PNG_STUB
-      });
+      // this.setState({
+      //   src: BASE64_PNG_STUB
+      // });
     }
   }, {
     key: 'render',
     value: function render() {
-      var _state = this.state,
-          hidden = _state.hidden,
-          settings = _state.settings,
-          label = _state.label;
+      var _props = this.props,
+          hidden = _props.hidden,
+          settings = _props.settings,
+          label = _props.label;
 
       return _react2.default.createElement(
         Wrapper,
@@ -31604,7 +31604,7 @@ var ImagePreview = function (_React$Component) {
           null,
           label
         ),
-        _react2.default.createElement(Image, _extends({}, this.state, { onError: this.onLoadError }))
+        _react2.default.createElement(Image, _extends({}, this.props, { onError: this.onLoadError }))
       );
     }
   }]);
@@ -33056,10 +33056,11 @@ var ImageScrubber = function (_React$Component) {
             )
           )
         ),
-        _react2.default.createElement('img', { className: 'testImage', src: testImage, style: {
-            display: this.state.dontUseScrubberView ? 'block' : 'none',
-            margin: 'auto'
-          } }),
+        _react2.default.createElement('img', {
+          className: 'testImage',
+          src: testImage,
+          style: { display: this.state.dontUseScrubberView ? 'block' : 'none', margin: 'auto' }
+        }),
         _react2.default.createElement(
           _reactTwentytwenty2.default,
           {
@@ -33070,14 +33071,14 @@ var ImageScrubber = function (_React$Component) {
             newPosition: position,
             style: { display: this.state.dontUseScrubberView ? 'none' : 'block' }
           },
-          _react2.default.createElement('img', { className: 'refImage', src: refImage, onError: this.handleLoadingError }),
+          _react2.default.createElement('img', {
+            className: 'refImage',
+            src: refImage,
+            onError: this.handleLoadingError
+          }),
           _react2.default.createElement('img', { className: 'testImage', src: testImage }),
-          _react2.default.createElement(SliderBar, {
-            className: 'slider',
-            style: { display: position === 0 || position === 100 ? 'none' : '' }
-          })
-        ),
-        '}'
+          _react2.default.createElement(SliderBar, { className: 'slider' })
+        )
       );
     }
   }]);

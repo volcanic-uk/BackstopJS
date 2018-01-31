@@ -40,21 +40,21 @@ class ImagePreview extends React.Component {
     super(props);
     this.onLoadError = this.onLoadError.bind(this);
 
-    this.state = this.props;
+    // this.state = this.props;
   }
 
   onLoadError() {
-    this.setState({
-      src: BASE64_PNG_STUB
-    });
+    // this.setState({
+    //   src: BASE64_PNG_STUB
+    // });
   }
 
   render() {
-    let { hidden, settings, label } = this.state;
+    let { hidden, settings, label } = this.props;
     return (
       <Wrapper hidden={hidden} withText={settings.textInfo}>
         <Label>{label}</Label>
-        <Image {...this.state} onError={this.onLoadError} />
+        <Image {...this.props} onError={this.onLoadError} />
       </Wrapper>
     );
   }

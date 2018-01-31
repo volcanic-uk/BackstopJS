@@ -38,23 +38,25 @@ const Label = styled.span`
 class ImagePreview extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {};
     this.onLoadError = this.onLoadError.bind(this);
-
-    // this.state = this.props;
   }
 
   onLoadError() {
-    // this.setState({
-    //   src: BASE64_PNG_STUB
-    // });
+    this.setState({
+      imgLoadError: true
+    });
   }
 
   render() {
-    let { hidden, settings, label } = this.props;
+    let { hidden, settings, label, src } = this.props;
+    if (!src || src === '../..' || this.state.imgLoadError) {
+      src = BASE64_PNG_STUB;
+    }
     return (
       <Wrapper hidden={hidden} withText={settings.textInfo}>
         <Label>{label}</Label>
-        <Image {...this.props} onError={this.onLoadError} />
+        <Image {...this.props} src={src} onError={this.onLoadError} />
       </Wrapper>
     );
   }

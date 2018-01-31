@@ -31575,18 +31575,17 @@ var ImagePreview = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (ImagePreview.__proto__ || Object.getPrototypeOf(ImagePreview)).call(this, props));
 
+    _this.state = {};
     _this.onLoadError = _this.onLoadError.bind(_this);
-
-    // this.state = this.props;
     return _this;
   }
 
   _createClass(ImagePreview, [{
     key: 'onLoadError',
     value: function onLoadError() {
-      // this.setState({
-      //   src: BASE64_PNG_STUB
-      // });
+      this.setState({
+        imgLoadError: true
+      });
     }
   }, {
     key: 'render',
@@ -31594,8 +31593,12 @@ var ImagePreview = function (_React$Component) {
       var _props = this.props,
           hidden = _props.hidden,
           settings = _props.settings,
-          label = _props.label;
+          label = _props.label,
+          src = _props.src;
 
+      if (!src || src === '../..' || this.state.imgLoadError) {
+        src = BASE64_PNG_STUB;
+      }
       return _react2.default.createElement(
         Wrapper,
         { hidden: hidden, withText: settings.textInfo },
@@ -31604,7 +31607,7 @@ var ImagePreview = function (_React$Component) {
           null,
           label
         ),
-        _react2.default.createElement(Image, _extends({}, this.props, { onError: this.onLoadError }))
+        _react2.default.createElement(Image, _extends({}, this.props, { src: src, onError: this.onLoadError }))
       );
     }
   }]);
@@ -33059,7 +33062,10 @@ var ImageScrubber = function (_React$Component) {
         _react2.default.createElement('img', {
           className: 'testImage',
           src: testImage,
-          style: { display: this.state.dontUseScrubberView ? 'block' : 'none', margin: 'auto' }
+          style: {
+            display: this.state.dontUseScrubberView ? 'block' : 'none',
+            margin: 'auto'
+          }
         }),
         _react2.default.createElement(
           _reactTwentytwenty2.default,

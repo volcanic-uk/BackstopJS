@@ -89,7 +89,7 @@ export default class ImageScrubber extends React.Component {
       showScrubber
     } = this.props;
 
-    const dontUseScrubberView = this.state.dontUseScrubberView;
+    const dontUseScrubberView = this.state.dontUseScrubberView || !showButtons;
 
     return (
       <Wrapper>

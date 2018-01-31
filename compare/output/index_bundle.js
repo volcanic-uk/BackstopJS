@@ -31835,9 +31835,6 @@ var ScrubberModal = function (_React$Component) {
           refImage = _props$scrubber$test.reference,
           testImage = _props$scrubber$test.test,
           diffImage = _props$scrubber$test.diffImage;
-
-
-      console.log('>>', this.props.scrubber.test);
       var _props$scrubber = this.props.scrubber,
           visible = _props$scrubber.visible,
           mode = _props$scrubber.mode,
@@ -33024,7 +33021,7 @@ var ImageScrubber = function (_React$Component) {
           showScrubber = _props.showScrubber;
 
 
-      var dontUseScrubberView = this.state.dontUseScrubberView;
+      var dontUseScrubberView = this.state.dontUseScrubberView || !showButtons;
 
       return _react2.default.createElement(
         Wrapper,
@@ -33070,13 +33067,18 @@ var ImageScrubber = function (_React$Component) {
         _react2.default.createElement('img', {
           className: 'testImage',
           src: testImage,
-          style: { margin: 'auto', display: dontUseScrubberView ? 'block' : 'none' }
+          style: {
+            margin: 'auto',
+            display: dontUseScrubberView ? 'block' : 'none'
+          }
         }),
         _react2.default.createElement(
           'div',
-          { style: {
+          {
+            style: {
               display: dontUseScrubberView ? 'none' : 'block'
-            } },
+            }
+          },
           _react2.default.createElement(
             _reactTwentytwenty2.default,
             {
@@ -33086,7 +33088,11 @@ var ImageScrubber = function (_React$Component) {
               initialPosition: position,
               newPosition: position
             },
-            _react2.default.createElement('img', { className: 'refImage', src: refImage, onError: this.handleLoadingError }),
+            _react2.default.createElement('img', {
+              className: 'refImage',
+              src: refImage,
+              onError: this.handleLoadingError
+            }),
             _react2.default.createElement('img', { className: 'testImage', src: testImage }),
             _react2.default.createElement(SliderBar, { className: 'slider' })
           )

@@ -22,13 +22,13 @@ const Value = styled.span`
 
 export default class DiffDetails extends React.Component {
   render() {
-    let { diff, settings } = this.props;
-    if (!diff) {
+    let { diff, suppress } = this.props;
+    if (!diff || suppress) {
       return null;
     }
 
     return (
-      <Row hidden={!settings.textInfo}>
+      <Row>
         <Label>diff%: </Label>
         <Value>{diff.misMatchPercentage}</Value>
         <Label>diff-x: </Label>

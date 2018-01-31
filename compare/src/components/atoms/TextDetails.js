@@ -81,7 +81,7 @@ class TextDetails extends React.Component {
           <Label>filename: </Label>
           <Value onMouseOver={this.showPanel}>{fileName}</Value>
         </Row>
-        <DiffDetails settings={settings} diff={diff} />
+        <DiffDetails suppress={!settings.textInfo} diff={diff} />
 
         <DetailsPanel {...{ showPanel }} onMouseLeave={this.hidePanel}>
           <Row>
@@ -94,7 +94,7 @@ class TextDetails extends React.Component {
             <Label>filename: </Label>
             <Value>{fileName}</Value>
           </Row>
-          <DiffDetails settings={settings} diff={diff} />
+          <DiffDetails diff={diff} />
         </DetailsPanel>
       </WrapperDetails>
     );

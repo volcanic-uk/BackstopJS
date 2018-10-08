@@ -101,7 +101,7 @@ export default class ImageScrubber extends React.Component {
         return;
       }
 
-      const refImg = document.images.scrubberRefImage;
+      const refImg = document.images.isolatedRefImage;
       const testImg = document.images.isolatedTestImage;
 
       const h = refImg.height;
@@ -155,12 +155,12 @@ export default class ImageScrubber extends React.Component {
                 DIFF
               </ScrubberViewBtn>
 
-              {/*              <ScrubberViewBtn
+              <ScrubberViewBtn
                 selected={scrubberModalMode === 'SHOW_SCRUBBER_DIVERGED_IMAGE'}
                 onClick={getDiverged}
               >
                 DIVERGED
-              </ScrubberViewBtn> */}
+              </ScrubberViewBtn> 
 
               <ScrubberViewBtn
                 selected={scrubberModalMode === 'SCRUB'}
@@ -171,6 +171,13 @@ export default class ImageScrubber extends React.Component {
             </div>
           )}
         </WrapTitle>
+        <img
+          id="isolatedRefImage"
+          src={refImage}
+          style={{
+            display: 'none'
+          }}
+        />
         <img
           id="isolatedTestImage"
           className="testImage"

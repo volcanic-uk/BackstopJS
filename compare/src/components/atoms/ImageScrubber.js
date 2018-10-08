@@ -160,7 +160,7 @@ export default class ImageScrubber extends React.Component {
                 onClick={getDiverged}
               >
                 DIVERGED
-              </ScrubberViewBtn> 
+              </ScrubberViewBtn>
 
               <ScrubberViewBtn
                 selected={scrubberModalMode === 'SCRUB'}

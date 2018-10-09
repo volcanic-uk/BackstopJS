@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import TwentyTwenty from 'backstop-twentytwenty';
 import { colors, fonts, shadows } from '../../styles';
-import diverged from 'diverged';
 
 const ScrubberViewBtn = styled.button`
   margin: 1em;
@@ -108,7 +107,7 @@ export default class ImageScrubber extends React.Component {
     } = this.props;
 
     const scrubberTestImageSlug = this.props[testImageType];
-    
+
     // TODO: halp. i don't haz context
     const that = this;
     // TODO: concurrency?
@@ -138,13 +137,13 @@ export default class ImageScrubber extends React.Component {
         }
         const lcsDiffResult = imageToCanvasContext(null, h, w);
         lcsDiffResult.putImageData(clampedImgData, 0, 0);
-        
+
         const divergedImageResult = lcsDiffResult.canvas.toDataURL('image/png');
         showScrubberDivergedImage(divergedImageResult);
         that.loadingDiverge(false);
       }, false);
 
-      worker.postMessage({ 
+      worker.postMessage({
         divergedInput: [
           getImgDataDataFromContext(imageToCanvasContext(refImg)),
           getImgDataDataFromContext(imageToCanvasContext(testImg)),

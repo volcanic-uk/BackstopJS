@@ -33519,7 +33519,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _templateObject = _taggedTemplateLiteral(['\n  margin: 1em;\n  padding: 10px 16px;\n  height: 32px;\n  background-color: ', ';\n  color: ', ';\n  border-radius: 3px;\n  text-transform: uppercase;\n  font-family: ', ';\n  text-align: center;\n  font-size: 12px;\n  border: none;\n  box-shadow: ', ';\n\n  transition: all 0.3s ease-in-out;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n    box-shadow: ', ';\n  }\n'], ['\n  margin: 1em;\n  padding: 10px 16px;\n  height: 32px;\n  background-color: ', ';\n  color: ', ';\n  border-radius: 3px;\n  text-transform: uppercase;\n  font-family: ', ';\n  text-align: center;\n  font-size: 12px;\n  border: none;\n  box-shadow: ', ';\n\n  transition: all 0.3s ease-in-out;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n    box-shadow: ', ';\n  }\n']),
+var _templateObject = _taggedTemplateLiteral(['\n  margin: 1em;\n  padding: 10px 16px;\n  height: 32px;\n  background-color: ', ';\n  color: ', ';\n  border-radius: 3px;\n  text-transform: uppercase;\n  font-family: ', ';\n  text-align: center;\n  font-size: 12px;\n  border: none;\n  box-shadow: ', ';\n\n  transition: all 100ms ease-in-out;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n    box-shadow: ', ';\n  }\n\n  &.loadingDiverged {\n    animation: blink normal 1200ms infinite ease-in-out; \n  }\n  @keyframes blink {0%{opacity:1;} 50%{opacity:0.75;} 100%{opacity:1;}}\n\n'], ['\n  margin: 1em;\n  padding: 10px 16px;\n  height: 32px;\n  background-color: ', ';\n  color: ', ';\n  border-radius: 3px;\n  text-transform: uppercase;\n  font-family: ', ';\n  text-align: center;\n  font-size: 12px;\n  border: none;\n  box-shadow: ', ';\n\n  transition: all 100ms ease-in-out;\n\n  &:focus {\n    outline: none;\n  }\n\n  &:hover {\n    cursor: pointer;\n    box-shadow: ', ';\n  }\n\n  &.loadingDiverged {\n    animation: blink normal 1200ms infinite ease-in-out; \n  }\n  @keyframes blink {0%{opacity:1;} 50%{opacity:0.75;} 100%{opacity:1;}}\n\n']),
     _templateObject2 = _taggedTemplateLiteral(['\n  cursor: ew-resize;\n  padding-bottom: 20px;\n  overflow: hidden;\n\n  .testImage {\n    opacity: 1;\n  }\n\n  .testImage,\n  .refImage {\n    max-width: 100%;\n  }\n'], ['\n  cursor: ew-resize;\n  padding-bottom: 20px;\n  overflow: hidden;\n\n  .testImage {\n    opacity: 1;\n  }\n\n  .testImage,\n  .refImage {\n    max-width: 100%;\n  }\n']),
     _templateObject3 = _taggedTemplateLiteral(['\n  display: flex;\n  justify-content: center;\n  padding-bottom: 20px;\n'], ['\n  display: flex;\n  justify-content: center;\n  padding-bottom: 20px;\n']),
     _templateObject4 = _taggedTemplateLiteral(['\n  height: 100%;\n  width: 5px;\n  background: ', ';\n  transform: translate(-2.5px, 0);\n'], ['\n  height: 100%;\n  width: 5px;\n  background: ', ';\n  transform: translate(-2.5px, 0);\n']);
@@ -33577,10 +33577,12 @@ var ImageScrubber = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (ImageScrubber.__proto__ || Object.getPrototypeOf(ImageScrubber)).call(this, props));
 
     _this.state = {
-      dontUseScrubberView: false
+      dontUseScrubberView: false,
+      isLoading: false
     };
 
     _this.handleLoadingError = _this.handleLoadingError.bind(_this);
+    _this.loadingDiverge = _this.loadingDiverge.bind(_this);
     return _this;
   }
 
@@ -33589,6 +33591,13 @@ var ImageScrubber = function (_React$Component) {
     value: function handleLoadingError() {
       this.setState({
         dontUseScrubberView: true
+      });
+    }
+  }, {
+    key: 'loadingDiverge',
+    value: function loadingDiverge(torf) {
+      this.setState({
+        isLoading: !!torf
       });
     }
   }, {
@@ -33613,34 +33622,75 @@ var ImageScrubber = function (_React$Component) {
 
       var scrubberTestImageSlug = this.props[testImageType];
 
-      function getDiverged(arg) {
-        // eslint-disable-line
+      // TODO: halp. i don't haz context
+      var that = this;
+      // TODO: concurrency?
+      function divergedWorker() {
         if (divergedImage) {
           showScrubberDivergedImage(divergedImage);
           return;
         }
+        showScrubberDivergedImage('');
+        that.loadingDiverge(true);
 
         var refImg = document.images.isolatedRefImage;
         var testImg = document.images.isolatedTestImage;
-
         var h = refImg.height;
         var w = refImg.width;
-        var refCtx = imageToCanvasContext(refImg);
-        var testCtx = imageToCanvasContext(testImg);
 
-        console.log('starting diverged>>', new Date());
-        var divergedImgData = (0, _diverged2.default)(getImgDataDataFromContext(refCtx), getImgDataDataFromContext(testCtx), h, w);
+        var worker = new Worker('divergedWorker.js');
+        worker.addEventListener('close', function (e) {
+          console.log('Diverged is cleaned up.', e);
+        });
 
-        var clampedImgData = getEmptyImgData(h, w);
-        for (var i = divergedImgData.length - 1; i >= 0; i--) {
-          clampedImgData.data[i] = divergedImgData[i];
-        }
-        var lcsDiffResult = imageToCanvasContext(null, w, h);
-        lcsDiffResult.putImageData(clampedImgData, 0, 0);
+        worker.addEventListener('message', function (result) {
+          var divergedImgData = result.data;
+          var clampedImgData = getEmptyImgData(h, w);
+          for (var i = divergedImgData.length - 1; i >= 0; i--) {
+            clampedImgData.data[i] = divergedImgData[i];
+          }
+          var lcsDiffResult = imageToCanvasContext(null, h, w);
+          lcsDiffResult.putImageData(clampedImgData, 0, 0);
 
-        var divergedImageResult = lcsDiffResult.canvas.toDataURL('image/png');
-        showScrubberDivergedImage(divergedImageResult);
+          var divergedImageResult = lcsDiffResult.canvas.toDataURL('image/png');
+          showScrubberDivergedImage(divergedImageResult);
+          that.loadingDiverge(false);
+        }, false);
+
+        worker.postMessage({
+          divergedInput: [getImgDataDataFromContext(imageToCanvasContext(refImg)), getImgDataDataFromContext(imageToCanvasContext(testImg)), h, w]
+        });
       }
+
+      // function getDiverged () {
+      //   if (divergedImage) {
+      //     showScrubberDivergedImage(divergedImage);
+      //     return;
+      //   }
+
+      //   const refImg = document.images.isolatedRefImage;
+      //   const testImg = document.images.isolatedTestImage;
+      //   const h = refImg.height;
+      //   const w = refImg.width;
+
+      //   console.log('starting diverged>>', new Date().getTime());
+      //   const divergedImgData = diverged(
+      //     getImgDataDataFromContext(imageToCanvasContext(refImg)),
+      //     getImgDataDataFromContext(imageToCanvasContext(testImg)),
+      //     h,
+      //     w
+      //   );
+
+      //   let clampedImgData = getEmptyImgData(h, w);
+      //   for (var i = divergedImgData.length - 1; i >= 0; i--) {
+      //     clampedImgData.data[i] = divergedImgData[i];
+      //   }
+      //   var lcsDiffResult = imageToCanvasContext(null, h, w);
+      //   lcsDiffResult.putImageData(clampedImgData, 0, 0);
+
+      //   const divergedImageResult = lcsDiffResult.canvas.toDataURL('image/png');
+      //   showScrubberDivergedImage(divergedImageResult);
+      // }
 
       var dontUseScrubberView = this.state.dontUseScrubberView || !showButtons;
       return _react2.default.createElement(
@@ -33680,9 +33730,10 @@ var ImageScrubber = function (_React$Component) {
               ScrubberViewBtn,
               {
                 selected: scrubberModalMode === 'SHOW_SCRUBBER_DIVERGED_IMAGE',
-                onClick: getDiverged
+                onClick: divergedWorker,
+                className: this.state.isLoading ? 'loadingDiverged' : ''
               },
-              'DIVERGED'
+              this.state.isLoading ? 'DIVERGING!' : 'DIVERGED'
             ),
             _react2.default.createElement(
               ScrubberViewBtn,
@@ -33770,10 +33821,10 @@ function getEmptyImgData(h, w) {
   return o.createImageData(w, h);
 }
 
-function imageToCanvasContext(_img, w, h) {
+function imageToCanvasContext(_img, h, w) {
   var img = _img;
   if (!_img) {
-    img = { width: w, height: h };
+    img = { height: h, width: w };
   }
   var canvas = document.createElement('canvas');
   canvas.width = img.width;
@@ -34041,13 +34092,17 @@ TwentyTwenty.defaultProps = {
 
 "use strict";
 
-
-let MEYERS_DIFF_ARRAY_METHOD = undefined;
+const noop = function (){};
+let LCS_DIFF_ARRAY_METHOD = undefined;
 // debugger
 if (true) {
-    MEYERS_DIFF_ARRAY_METHOD = __webpack_require__(296).diffArrays;
+    LCS_DIFF_ARRAY_METHOD = __webpack_require__(296).diffArrays;
 } else {
-    MEYERS_DIFF_ARRAY_METHOD = JsDiff.diffArrays;
+    try {
+        LCS_DIFF_ARRAY_METHOD = JsDiff.diffArrays;
+    } catch(err) {
+        console.error(err);
+    }
 }
 
 const spread = 50; // range of adjacent pixels to aggregate when calculating diff
@@ -34225,7 +34280,7 @@ function reduceColumnDiffRaw(columnDiffs, h, w) {
 function diffArr(refArr, testArr, h, w) {
     let rawResultArr = [];
     for (let i = 0; i < refArr.length; i++) {
-        rawResultArr.push(MEYERS_DIFF_ARRAY_METHOD(refArr[i], testArr[i]));
+        rawResultArr.push(LCS_DIFF_ARRAY_METHOD(refArr[i], testArr[i]));
     }
     return rawResultArr;
 }

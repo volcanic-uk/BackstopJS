@@ -89,7 +89,6 @@ export default class ImageScrubber extends React.Component {
   }
 
   render () {
-    console.log('ImageScrubber PROPS>>>', this.props);
     const {
       scrubberModalMode,
       testImageType,
@@ -107,6 +106,11 @@ export default class ImageScrubber extends React.Component {
     } = this.props;
 
     const scrubberTestImageSlug = this.props[testImageType];
+
+    // only show the diverged option if the report comes from web server
+    function showDivergedOption () {
+      return /remote/.test(location.search);
+    }
 
     // TODO: halp. i don't haz context
     const that = this;
@@ -211,18 +215,19 @@ export default class ImageScrubber extends React.Component {
               </ScrubberViewBtn>
 
               <ScrubberViewBtn
-                selected={scrubberModalMode === 'SHOW_SCRUBBER_DIVERGED_IMAGE'}
-                onClick={divergedWorker}
-                className={this.state.isLoading ? 'loadingDiverged' : ''}
-              >
-                {this.state.isLoading ? 'DIVERGING!' : 'DIVERGED'}
-              </ScrubberViewBtn>
-
-              <ScrubberViewBtn
                 selected={scrubberModalMode === 'SCRUB'}
                 onClick={showScrubber}
               >
                 SCRUBBER
+              </ScrubberViewBtn>
+
+              <ScrubberViewBtn
+                selected={scrubberModalMode === 'SHOW_SCRUBBER_DIVERGED_IMAGE'}
+                onClick={divergedWorker}
+                className={this.state.isLoading ? 'loadingDiverged' : ''}
+                style={{display: showDivergedOption() ? '' : 'none'}}
+              >
+                {this.state.isLoading ? 'DIVERGING!' : 'DIVERGED'}
               </ScrubberViewBtn>
             </div>
           )}

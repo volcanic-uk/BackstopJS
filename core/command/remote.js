@@ -4,7 +4,7 @@ const { exec } = require('child_process');
 
 module.exports = {
   execute: function (config) {
-    const MIDDLEWARE_PATH = path.resolve(config.backstop,'remote');
+    const MIDDLEWARE_PATH = path.resolve(config.backstop, 'remote');
     const projectPath = path.resolve(config.projectPath);
     logger.log('Starting remote.');
     return new Promise(function (resolve, reject) {

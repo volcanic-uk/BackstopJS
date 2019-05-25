@@ -1,6 +1,3 @@
-var fs = require('../util/fs');
-var path = require('path');
-var map = require('p-map');
 var version = require('../../package.json').version;
 
 module.exports = {

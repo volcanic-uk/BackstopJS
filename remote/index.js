@@ -3,8 +3,12 @@
 
 var fs = require('fs');
 var express = require('express');
+var backstop = require('../core/runner');
 
+console.log()
 module.exports = function (app) {
+    backstop('version', {});
+
     app._backstop = app._backstop || {};
     app._backstop.testCtr = 0;
     app._backstop.viewCtr = 0;
@@ -26,6 +30,7 @@ module.exports = function (app) {
       console.log('BACKSTOP DYNAMIC TEST>>>', app._backstop.testCtr);
       res.send('BACKSTOP DYNAMIC TEST>     ' + app._backstop.testCtr);
     });
+    
     app.get('/dview/:testId_scenarioId', (req, res) => {
       app._backstop.viewCtr++;
       console.log('BACKSTOP DYNAMIC VIEW:' + app._backstop.viewCtr);

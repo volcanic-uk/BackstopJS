@@ -1,6 +1,8 @@
 var path = require('path');
 var extendConfig = require('./extendConfig');
 
+const NON_CONFIG_COMMANDS = ['init', 'version'];
+
 function projectPath (config) {
   // Legacy mode, if the cwd is the backstop module
   // if (config.backstop === process.cwd()) {
@@ -33,7 +35,7 @@ function loadProjectConfig (command, options, config) {
   }
 
   var userConfig = {};
-  var CMD_REQUIRES_CONFIG = command !== 'init';
+  const CMD_REQUIRES_CONFIG = !NON_CONFIG_COMMANDS.includes(command);
   if (CMD_REQUIRES_CONFIG) {
     // This flow is confusing -- is checking for !config.backstopConfigFileName more reliable?
     if (options && typeof options.config === 'object' && options.config.scenarios) {

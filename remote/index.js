@@ -17,24 +17,28 @@ module.exports = function (app) {
     app.use(express.json({limit: '2mb'})); // support json encoded bodies
     app.use(express.urlencoded({ extended: true, limit: '2mb' })); // support encoded bodies
 
-    app.post('/dtest/:testId_scenarioId', (req, res) => {
+    app.post('/dtest/:testId/:scenarioId', (req, res) => {
       //JSON.stringify(req.body.content, null, 2)
       debugger;
       app._backstop.testCtr++;
 
-      if (!req.params.testId_scenarioId in app._backstop.tests) {
-        app._backstop.tests[req.params.testId_scenarioId] = {};
+      if (!req.params.testId in app._backstop.tests) {
+        app._backstop.tests[req.params.testId] = {};
       }
-      app._backstop.tests[req.params.testId_scenarioId] = req.body;
+      app._backstop.tests[req.params.testId] = {[req.params.scenarioId]: req.body};
 
-      console.log('BACKSTOP DYNAMIC TEST>>>', app._backstop.testCtr);
+      console.log('BACKSTOP DYNAMIC TEST>>>', app._backstop.testCtr, req.params.testId, req.params.scenarioId);
       res.send('BACKSTOP DYNAMIC TEST>     ' + app._backstop.testCtr);
     });
     
-    app.get('/dview/:testId_scenarioId', (req, res) => {
+    app.get('/dview/:testId/:scenarioId', (req, res) => {
       app._backstop.viewCtr++;
-      console.log('BACKSTOP DYNAMIC VIEW:' + app._backstop.viewCtr);
-      // res.send('BACKSTOP DYNAMIC TEST>     ' + JSON.stringify(req.params, null, 2) + JSON.stringify(app._backstop, null, 2));
-      res.send(app._backstop.tests[req.params.testId_scenarioId].content);
+      console.log('BACKSTOP DYNAMIC VIEW:' + app._backstop.viewCtr, req.params.testId, req.params.scenarioId);
+      try {
+        res.send(app._backstop.tests[req.params.testId][req.params.scenarioId].content);
+      } catch (err) {
+        console.log(err);
+        res.send(`${req.params.testId} ${req.params.scenarioId}` + err);
+      }
     });
 };

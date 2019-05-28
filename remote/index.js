@@ -2,12 +2,14 @@
 'use strict';
 
 var fs = require('fs');
+var path = require('path');
 var express = require('express');
 var backstop = require('../core/runner');
+var PATH_TO_CONFIG = path.resolve(process.cwd(), 'backstop');
 
-console.log()
+
 module.exports = function (app) {
-    backstop('version', {});
+
 
     app._backstop = app._backstop || {};
     app._backstop.testCtr = 0;
@@ -18,8 +20,6 @@ module.exports = function (app) {
     app.use(express.urlencoded({ extended: true, limit: '2mb' })); // support encoded bodies
 
     app.post('/dtest/:testId/:scenarioId', (req, res) => {
-      //JSON.stringify(req.body.content, null, 2)
-      debugger;
       app._backstop.testCtr++;
 
       if (!req.params.testId in app._backstop.tests) {
@@ -27,8 +27,23 @@ module.exports = function (app) {
       }
       app._backstop.tests[req.params.testId] = {[req.params.scenarioId]: req.body};
 
-      console.log('BACKSTOP DYNAMIC TEST>>>', app._backstop.testCtr, req.params.testId, req.params.scenarioId);
-      res.send('BACKSTOP DYNAMIC TEST>     ' + app._backstop.testCtr);
+      console.log('APPENDING TEST. VIEW AT>>> ', `dview/${req.params.testId}/${req.params.scenarioId} `, app._backstop.testCtr);
+      console.log('Using config at: ' + PATH_TO_CONFIG);
+
+      var config = require(PATH_TO_CONFIG);
+      var s = config.scenarios[0];
+      s.label = req.body.name;
+      s.url = s.url
+        .replace(/<testId>/, req.params.testId)
+        .replace(/<scenarioId>/, req.params.scenarioId);
+      
+      console.log('config', config)
+      backstop('test', {config})
+      setTimeout(()=>{
+        console.log('RESPONSE NOWvvvv')
+        res.send('BACKSTOP DYNAMIC TEST>     ' + app._backstop.testCtr)
+      }, 5000)
+
     });
     
     app.get('/dview/:testId/:scenarioId', (req, res) => {

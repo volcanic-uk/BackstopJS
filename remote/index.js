@@ -30,20 +30,31 @@ module.exports = function (app) {
       console.log('APPENDING TEST. VIEW AT>>> ', `dview/${req.params.testId}/${req.params.scenarioId} `, app._backstop.testCtr);
       console.log('Using config at: ' + PATH_TO_CONFIG);
 
-      var config = require(PATH_TO_CONFIG);
-      var s = config.scenarios[0];
+      let config = require(PATH_TO_CONFIG);
+      let s = config.scenarios[0];
       s.label = req.body.name;
       s.url = s.url
         .replace(/<testId>/, req.params.testId)
         .replace(/<scenarioId>/, req.params.scenarioId);
       
-      console.log('config', config)
-      backstop('test', {config})
-      setTimeout(()=>{
-        console.log('RESPONSE NOWvvvv')
-        res.send('BACKSTOP DYNAMIC TEST>     ' + app._backstop.testCtr)
-      }, 5000)
+      let result = {
+        label: s.label,
+        surl: s.url,
+        testId: req.params.testId, 
+        scenarioId: req.params.scenarioId, 
+        vid: app._backstop.testCtr
+      };
 
+      backstop('test', {config}).then(
+        () => {
+          result.ok = true;
+          res.send(JSON.stringify(result))
+        },
+        () => {
+          result.ok = false;
+          res.send(JSON.stringify(result))
+        }
+      )
     });
     
     app.get('/dview/:testId/:scenarioId', (req, res) => {

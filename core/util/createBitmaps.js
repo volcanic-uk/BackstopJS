@@ -43,8 +43,11 @@ function decorateConfigForCapture (config, isReference) {
 
   var screenshotNow = new Date();
   var screenshotDateTime = screenshotNow.getFullYear() + pad(screenshotNow.getMonth() + 1) + pad(screenshotNow.getDate()) + '-' + pad(screenshotNow.getHours()) + pad(screenshotNow.getMinutes()) + pad(screenshotNow.getSeconds());
+  if (configJSON.dynamicTestId) {
+    console.log(`dynamicTestId '${configJSON.dynamicTestId}' found. BackstopJS will run in dynamic-test mode.`);
+  }
 
-  configJSON.screenshotDateTime = screenshotDateTime;
+  configJSON.screenshotDateTime = configJSON.dynamicTestId ? configJSON.dynamicTestId : screenshotDateTime;
   configJSON.env = cloneDeep(config);
   configJSON.isReference = isReference;
   configJSON.paths.tempCompareConfigFileName = config.tempCompareConfigFileName;
@@ -94,7 +97,6 @@ function delegateScenarios (config) {
         // var variantLabelSafe = makeSafe(variant.label);
         variant._parent = scenario;
         scenarios.push(scenario);
-        // processScenario(casper, variant, variantLabelSafe, scenarioLabelSafe, viewports, bitmapsReferencePath, bitmapsTestPath, screenshotDateTime);
       });
     }
   });

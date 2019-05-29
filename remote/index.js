@@ -31,11 +31,13 @@ module.exports = function (app) {
       console.log('Using config at: ' + PATH_TO_CONFIG);
 
       let config = require(PATH_TO_CONFIG);
+      config.dynamicTestId = req.params.testId;
+      
       let s = config.scenarios[0];
       s.label = req.body.name;
       s.url = s.url
-        .replace(/<testId>/, req.params.testId)
-        .replace(/<scenarioId>/, req.params.scenarioId);
+        .replace(/{testId}/, req.params.testId)
+        .replace(/{scenarioId}/, req.params.scenarioId);
       
       let result = {
         label: s.label,

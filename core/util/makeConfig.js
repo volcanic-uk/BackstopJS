@@ -34,7 +34,7 @@ function loadProjectConfig (command, options, config) {
   if (CMD_REQUIRES_CONFIG) {
     // This flow is confusing -- is checking for !config.backstopConfigFileName more reliable?
     if (options && typeof options.config === 'object' && options.config.scenarios) {
-      console.log('User config detected.');
+      console.log('Object-literal config detected.');
       if (options.config.debug) {
         console.log(JSON.stringify(options.config, null, 2));
       }

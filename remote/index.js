@@ -27,12 +27,12 @@ module.exports = function (app) {
       }
       app._backstop.tests[req.params.testId] = {[req.params.scenarioId]: req.body};
 
-      console.log('APPENDING TEST. VIEW AT>>> ', `dview/${req.params.testId}/${req.params.scenarioId} `, app._backstop.testCtr);
-      console.log('Using config at: ' + PATH_TO_CONFIG);
+      console.log('Processing dynamic test request for ', `dview/${req.params.testId}/${req.params.scenarioId} `, app._backstop.testCtr);
+      console.log('Loadinfg dynamic config template at ' + PATH_TO_CONFIG);
 
       let config = require(PATH_TO_CONFIG);
       config.dynamicTestId = req.params.testId;
-      
+
       let s = config.scenarios[0];
       s.label = req.body.name;
       s.url = s.url
@@ -61,7 +61,7 @@ module.exports = function (app) {
     
     app.get('/dview/:testId/:scenarioId', (req, res) => {
       app._backstop.viewCtr++;
-      console.log('BACKSTOP DYNAMIC VIEW:' + app._backstop.viewCtr, req.params.testId, req.params.scenarioId);
+      console.log('Dynamic view request for ' + app._backstop.viewCtr, req.params.testId, req.params.scenarioId);
       try {
         res.send(app._backstop.tests[req.params.testId][req.params.scenarioId].content);
       } catch (err) {

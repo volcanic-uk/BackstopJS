@@ -24,6 +24,14 @@ function writeReport (config, reporter) {
 }
 
 function writeBrowserReport (config, reporter) {
+  var testConfig;
+  if (typeof config.args.config === 'object') {
+    testConfig = config.args.config;
+  } else {
+    testConfig = Object.assign({}, require(config.backstopConfigFileName));
+  }
+
+
   var browserReporter = cloneDeep(reporter);
   function toAbsolute (p) {
     return (path.isAbsolute(p)) ? p : path.join(config.projectPath, p);
@@ -46,14 +54,46 @@ function writeBrowserReport (config, reporter) {
         }
       }
     }
+console.log('CONFIG>>>',config)
 
-    var jsonp = 'report(' + JSON.stringify(browserReporter, null, 2) + ');';
-    return fs.writeFile(toAbsolute(config.compareConfigFileName), jsonp).then(function () {
-      logger.log('Copied configuration to: ' + toAbsolute(config.compareConfigFileName));
+    var reportConfigFilename = toAbsolute(config.compareConfigFileName);
+    var testReportJsonName = toAbsolute(config.bitmaps_test + '/' + config.screenshotDateTime + '/report.json');
+console.log('reportConfigFilename>>>',reportConfigFilename)
+console.log('testReportJsonName>>>',testReportJsonName)
+
+    // if this is a dynamic test then we assume browserReporter has one scenario. This scenario will be appended to any existing report.
+    if (testConfig.dynamicTestId) {
+      console.log("Will create/update report config here>>> " + reportConfigFilename, testConfig.dynamicTestId);
+      try {
+        console.log('attempting to get>>>', testReportJsonName);
+        // var htmlReportJson = require(testReportJsonName);
+        // console.log('htmlReportJson>>>', htmlReportJson);
+        // arr1.map(obj => arr2.find(o => o.id === obj.id) || obj);
+
+      } catch(err) {
+        console.log('Creating new report.');
+      }
+    }
+
+    var jsonReport = JSON.stringify(browserReporter, null, 2);
+    var jsonpReport = `report(${jsonReport});`;
+
+ var jsonConfgWrite = fs.writeFile(testReportJsonName, jsonReport).then(function () {
+      logger.log('Copied json report to: ' + testReportJsonName);
     }, function (err) {
-      logger.error('Failed configuration copy');
+      logger.error('Failed json report copy to: ' + testReportJsonName);
       throw err;
     });
+
+var jsonpConfgWrite = fs.writeFile(toAbsolute(reportConfigFilename), jsonpReport).then(function () {
+      logger.log('Copied jsonp report to: ' + reportConfigFilename);
+    }, function (err) {
+      logger.error('Failed jsonp report copy to: ' + reportConfigFilename);
+      throw err;
+    });
+
+    return allSettled([jsonpConfgWrite, jsonConfgWrite]);
+
   }).then(function () {
     if (config.openReport && config.report && config.report.indexOf('browser') > -1) {
       var executeCommand = require('./index');
@@ -128,7 +168,7 @@ function writeJsonReport (config, reporter) {
     return fs.writeFile(toAbsolute(config.compareJsonFileName), JSON.stringify(jsonReporter.getReport(), null, 2)).then(function () {
       logger.log('Wrote Json report to: ' + toAbsolute(config.compareJsonFileName));
     }, function (err) {
-      logger.error('Failed writing Json report');
+      logger.error('Failed writing Json report to: ' + toAbsolute(config.compareJsonFileName));
       throw err;
     });
   });

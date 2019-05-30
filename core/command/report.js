@@ -54,22 +54,18 @@ function writeBrowserReport (config, reporter) {
         }
       }
     }
-console.log('CONFIG>>>',config)
 
     var reportConfigFilename = toAbsolute(config.compareConfigFileName);
     var testReportJsonName = toAbsolute(config.bitmaps_test + '/' + config.screenshotDateTime + '/report.json');
-console.log('reportConfigFilename>>>',reportConfigFilename)
-console.log('testReportJsonName>>>',testReportJsonName)
 
     // if this is a dynamic test then we assume browserReporter has one scenario. This scenario will be appended to any existing report.
     if (testConfig.dynamicTestId) {
-      console.log("Will create/update report config here>>> " + reportConfigFilename, testConfig.dynamicTestId);
       try {
-        console.log('attempting to get>>>', testReportJsonName);
-        // var htmlReportJson = require(testReportJsonName);
-        // console.log('htmlReportJson>>>', htmlReportJson);
-        // arr1.map(obj => arr2.find(o => o.id === obj.id) || obj);
-
+        console.log('Attempting to open: ', testReportJsonName);
+        var testReportJson = require(testReportJsonName);
+        testReportJson.tests = testReportJson.tests.filter(test => test.pair.fileName !== browserReporter.tests[0].pair.fileName);
+        testReportJson.tests.push(browserReporter.tests[0]);
+        browserReporter = testReportJson;
       } catch(err) {
         console.log('Creating new report.');
       }

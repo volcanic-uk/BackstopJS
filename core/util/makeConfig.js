@@ -59,7 +59,7 @@ function makeConfig (command, options) {
   config.projectPath = projectPath(config);
   config.perf = {};
 
-  var userConfig = loadProjectConfig(command, options, config);
+  var userConfig = Object.assign({}, loadProjectConfig(command, options, config));
 
   return extendConfig(config, userConfig);
 }

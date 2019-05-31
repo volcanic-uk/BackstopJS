@@ -6,7 +6,7 @@ var path = require('path');
 var express = require('express');
 var backstop = require('../core/runner');
 var PATH_TO_CONFIG = path.resolve(process.cwd(), 'backstop');
-
+var _config = require(PATH_TO_CONFIG);
 
 module.exports = function (app) {
 
@@ -30,23 +30,22 @@ module.exports = function (app) {
       console.log('Processing dynamic test request for ', `dview/${req.params.testId}/${req.params.scenarioId} `, app._backstop.testCtr);
       console.log('Loadinfg dynamic config template at ' + PATH_TO_CONFIG);
 
-      let config = require(PATH_TO_CONFIG);
+      var config = JSON.parse(JSON.stringify(_config))
       config.dynamicTestId = req.params.testId;
-
-      let s = config.scenarios[0];
+      var s = config.scenarios[0];
       s.label = req.body.name;
       s.url = s.url
         .replace(/{testId}/, req.params.testId)
         .replace(/{scenarioId}/, req.params.scenarioId);
       
-      let result = {
+      var result = {
         label: s.label,
         surl: s.url,
         testId: req.params.testId, 
         scenarioId: req.params.scenarioId, 
         vid: app._backstop.testCtr
       };
-
+console.log('Starting backstop with:', result);
       backstop('test', {config}).then(
         () => {
           result.ok = true;

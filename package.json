@@ -6,6 +6,7 @@
     "backstop": "./cli/index.js"
   },
   "scripts": {
+    "preinstall": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true;",
     "lint": "eslint 'compare/*.js' 'compare/src/**/*.js' 'core/**/*.js' 'cli/**/*.js' 'capture/**/*.js' 'test/**/*.js'",
     "format": "prettier-eslint --write \"compare/src/**/*.js\"",
     "genConfig": "node ./cli/index.js genConfig",

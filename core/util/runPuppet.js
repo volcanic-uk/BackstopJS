@@ -9,6 +9,8 @@ const ensureDirectoryPath = require('./ensureDirectoryPath');
 const injectBackstopTools = require('../../capture/backstopTools.js');
 const engineTools = require('./engineTools');
 
+const chromium = require('chrome-aws-lambda');
+
 const MIN_CHROME_VERSION = 62;
 const TEST_TIMEOUT = 60000;
 const DEFAULT_FILENAME_TEMPLATE = '{configId}_{scenarioLabel}_{selectorIndex}_{selectorLabel}_{viewportIndex}_{viewportLabel}';
@@ -62,7 +64,12 @@ async function processScenarioView (scenario, variantOrScenarioLabelSafe, scenar
     config.engineOptions
   );
 
-  const browser = await puppeteer.launch(puppeteerArgs);
+  const browser = await chromium.puppeteer.launch({
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless
+  });
   const page = await browser.newPage();
 
   await page.setViewport({ width: VP_W, height: VP_H });

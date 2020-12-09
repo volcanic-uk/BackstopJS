@@ -1,4 +1,8 @@
-[![Build Status](https://travis-ci.org/garris/BackstopJS.svg?branch=master)](https://travis-ci.org/garris/BackstopJS)
+# Why the fork?
+Used by: https://github.com/jobscore/serverless-backstopjs
+
+We had to make backstopJS AWS Lambada compatible.
+
 
 # BackstopJS
 ![I'm in your webapps -- checkin your screens](http://garris.github.io/BackstopJS/assets/memes/im-in-ur-webapps-checking-ur-screens.jpg)
